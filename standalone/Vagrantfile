@@ -114,11 +114,15 @@ Vagrant.configure("2") do |config|
     mkdir -p /var/log/marathon
     kill -KILL `ps augwx | grep marathon | tr -s " " | cut -d' ' -f2`
     nohup /opt/marathon/bin/start --master zk://localhost:2181/mesos --zk_hosts localhost:2181 --event_subscriber http_callback > /var/log/marathon/nohup.log 2> /var/log/marathon/nohup.log < /dev/null &
-
     # Install and run Chronos based on:
     # https://mesosphere.io/learn/run-chronos-on-mesos/
     mkdir -p /var/log/chronos
     nohup /opt/chronos/bin/start-chronos.bash --master zk://localhost:2181/mesos --zk_hosts zk://localhost:2181/mesos --http_port 8081 > /var/log/chronos/nohup.log 2> /var/log/chronos/nohup.log < /dev/null &
+    wget -O /usr/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein && chmod +x /usr/bin/lein
+    mkdir -p /home/vagrant/mesos-workshop
+    wget -O /home/vagrant/mesos-workshop/hello-mesos.tar.gz https://github.com/clj-mesos-workshop/hello-mesos/archive/master.tar.gz && tar -C /home/vagrant/mesos-workshop -xzvf /home/vagrant/mesos-workshop/hello-mesos.tar.gz
+    wget -O /home/vagrant/mesos-workshop/rendler.tar.gz https://github.com/clj-mesos-workshop/RENDLER/archive/master.tar.gz && tar -C /home/vagrant/mesos-workshop -xzvf /home/vagrant/mesos-workshop/rendler.tar.gz
+    chown vagrant:vagrant -R /home/vagrant/mesos-workshop
     SCRIPT
 
   # If you wanted use `.dockercfg` file
